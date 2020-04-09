@@ -1,3 +1,16 @@
+/*** Send an Email notification ***/
+%macro sendit(to,subj);
+filename mymail email "&to" subject="&subj" type="text/html" CT= "text/html" lrecl=256;
+data _null_;
+	file mymail;
+	put 'Put your message here!';
+	put 'Second line here, before link:';
+	put '<a href="C:\File_To_Share">Click to go to shared file</a>';
+RUN;
+%mend;
+
+%sendit(You@gmail.com, EmailTitle)
+
 /*** Used to verify that the number of observations in two tables matches after a join ***/
 
 %let Library = LibraryName;
