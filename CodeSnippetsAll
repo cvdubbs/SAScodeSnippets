@@ -139,3 +139,22 @@ RUN;
 /*** Set Date Automatically ***/
 %LET ENDDATE = "%sysfunc(intnx(month, %sysfunc(today()),-2,e), date9.)"D;
 
+/*** A simple left join using Hash. Incredible increased speed when dealing with large tables ***/
+
+data OUTPUT_TABLE(drop = rc);
+LENGTH VAR_ADDED $2;
+
+ declare Hash groupz(dataset:'TABLE_JOINING_FROM');
+ 	groupz.definekey('VAR_MATCH_ON_ONE','VAR_MATCH_ON_TWO');
+ 	groupz.definedata('VAR_ADDED');
+ 	groupz.definedone();
+ do until(eof1);
+ 	set TABLE_JOINING_TO=eof1;
+ 		rc = groupz.FIND();
+		IF rc ne 0 THEN DO;
+			VAR_ADDED = '';
+		END;
+OUTPUT;
+END;
+STOP;
+RUN;
