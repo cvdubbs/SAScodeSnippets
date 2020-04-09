@@ -158,3 +158,44 @@ OUTPUT;
 END;
 STOP;
 RUN;
+
+/*** Hash Inner Join ***/
+
+data TABLE_OUT(drop=rc:);
+   if 0 then set TABLE_TWO TABLE_THREE;
+   if _N_ = 1 then do;
+      declare hash h1(dataset:"TABLE_TWO");
+      h1.defineKey('VAR_JOIN_ON');
+      h1.defineData('VAR_BRING_IN', 'VAR_BRING_IN_TWO');
+      h1.defineDone();
+   end;
+   
+   set TABLE_ONE();
+   rc1=h1.find();
+
+   if rc1=0;
+run;
+
+/*** Hash Inner Join three tables ***/
+
+data TABLE_OUT(drop=rc:);
+   if 0 then set TABLE_TWO TABLE_THREE;
+   if _N_ = 1 then do;
+      declare hash h1(dataset:"TABLE_TWO");
+      h1.defineKey('VAR_JOIN_ON');
+      h1.defineData('VAR_BRING_IN', 'VAR_BRING_IN_TWO');
+      h1.defineDone();
+      declare hash h2(dataset:"TABLE_THREE");
+      h2.defineKey('VAR_JOIN_ON');
+      h2.defineData('VAR_BRING_IN_TABTHREE');
+      h2.defineDone();
+   end;
+   
+   set TABLE_ONE(keep=name Salary);
+
+   rc1=h1.find();
+   rc2=h2.find();
+
+   if rc1=0 & rc2=0;
+run;
+
