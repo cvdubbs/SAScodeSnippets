@@ -1,2 +1,2 @@
 # SAScodeSnippets
-SAS code snippets I use everyday
+SAS code snippets I used everyday
